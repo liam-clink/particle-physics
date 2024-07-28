@@ -21,7 +21,7 @@ std::optional<std::string> load_text_file(const std::filesystem::path& filepath)
     auto size = std::filesystem::file_size(filepath);
 
     std::string buffer(size, '\0');
-    if (!file.read(buffer.data(), size))
+    if (file.read(buffer.data(), size))
         std::cerr << "Failed to read the file: " << filepath << std::endl;
 
     file.close();
@@ -31,7 +31,7 @@ std::optional<std::string> load_text_file(const std::filesystem::path& filepath)
 GLuint load_shader(const std::filesystem::path& filepath, GLenum shader_type)
 {
     auto shader_source = load_text_file(filepath);
-    if (shader_source)
+    if (!shader_source)
         throw std::runtime_error("Failed to read GLSL source file.");
 
     GLuint shader_id = glCreateShader(shader_type);
