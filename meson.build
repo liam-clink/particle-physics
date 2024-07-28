@@ -1,11 +1,7 @@
-project('hello triangle', 'cpp')
+project('Particle Physics', 'cpp')
 
 cpp = meson.get_compiler('cpp')
 
-executable('hello_triangle',
-'main.cpp',
-dependencies: [
-    dependency('glew'),
-    dependency('glfw3'),
-    dependency('GL')],
-)
+subdir('include')
+subdir('src')
+subdir('shaders')

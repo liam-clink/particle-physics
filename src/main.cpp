@@ -1,52 +1,7 @@
-#include <GL/glew.h>
-#define GLFW_DLL
-#include <GLFW/glfw3.h>
-#include <cstdio>
-#include <filesystem>
-#include <fstream>
+#include <gl_utils.hpp>
 #include <iostream>
-#include <optional>
 
 using std::cout;
-
-std::optional<std::string> load_text_file(const std::filesystem::path& filepath)
-{
-    std::ifstream file(filepath, std::ios::in);
-    if (!file.is_open())
-    {
-        std::cerr << "Failed to open file: " << filepath << std::endl;
-        return std::nullopt;
-    }
-
-    auto size = std::filesystem::file_size(filepath);
-
-    std::string buffer(size, '\0');
-    if (file.read(buffer.data(), size))
-        std::cerr << "Failed to read the file: " << filepath << std::endl;
-
-    file.close();
-    return buffer;
-}
-
-GLuint load_shader(const std::filesystem::path& filepath, GLenum shader_type)
-{
-    auto shader_source = load_text_file(filepath);
-    if (!shader_source)
-        throw std::runtime_error("Failed to read GLSL source file.");
-
-    GLuint shader_id = glCreateShader(shader_type);
-    if (!shader_id)
-        throw std::runtime_error("Failed to generate shader ID.");
-
-    // This is two lines because
-    const char* source = shader_source->c_str();
-    cout << "Shader source: \n";
-    cout << source;
-    glShaderSource(shader_id, 1, &source, NULL);
-
-    glCompileShader(shader_id);
-    return shader_id;
-}
 
 int main()
 {
@@ -100,8 +55,8 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // Compile the shaders
-    GLuint vs = load_shader("../test_vertex_shader.glsl", GL_VERTEX_SHADER);
-    GLuint fs = load_shader("../test_fragment_shader.glsl", GL_FRAGMENT_SHADER);
+    GLuint vs = load_shader("../share/Particle Physics/test_vertex_shader.glsl", GL_VERTEX_SHADER);
+    GLuint fs = load_shader("../share/Particle Physics/test_fragment_shader.glsl", GL_FRAGMENT_SHADER);
 
     // Link the shaders together
     GLuint shader_program = glCreateProgram();
