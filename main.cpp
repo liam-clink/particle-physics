@@ -35,11 +35,13 @@ GLuint load_shader(const std::filesystem::path& filepath, GLenum shader_type)
         throw std::runtime_error("Failed to read GLSL source file.");
 
     GLuint shader_id = glCreateShader(shader_type);
-    if (shader_id == 0)
+    if (!shader_id)
         throw std::runtime_error("Failed to generate shader ID.");
 
     // This is two lines because
     const char* source = shader_source->c_str();
+    cout << "Shader source: \n";
+    cout << source;
     glShaderSource(shader_id, 1, &source, NULL);
 
     glCompileShader(shader_id);
@@ -103,8 +105,8 @@ int main()
 
     // Link the shaders together
     GLuint shader_program = glCreateProgram();
-    glAttachShader(shader_program, fs);
     glAttachShader(shader_program, vs);
+    glAttachShader(shader_program, fs);
     glLinkProgram(shader_program);
 
     // Draw loop
