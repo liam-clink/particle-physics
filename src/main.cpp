@@ -12,6 +12,9 @@ int main()
         return 1;
     }
 
+    // Disable window resizing
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
     GLFWwindow* window = glfwCreateWindow(1920, 1080, "Hello Triangle", NULL, NULL);
     if (!window)
     {
