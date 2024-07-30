@@ -47,7 +47,7 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER,
                  vbo); // binds buffer to GL_ARRAY_BUFFER target
     // Allocate memory for the buffer bound to the GL_ARRAY_BUFFER target
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STREAM_DRAW);
 
     // Put the vertex buffer object into a vertex array object
     GLuint vao = 0;
@@ -67,6 +67,8 @@ int main()
     glAttachShader(shader_program, fs);
     glLinkProgram(shader_program);
 
+    glfwSwapInterval(1); // Enable vsync
+
     // Draw loop
     while (!glfwWindowShouldClose(window))
     {
@@ -81,6 +83,13 @@ int main()
         glfwPollEvents();
         // put the stuff we've been drawing onto the display
         glfwSwapBuffers(window);
+
+        // Update Triangle
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        points[6] += 0.01;
+        if (points[6] >= 1.)
+            points[6] -= 2.;
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
     }
 
     // close GL context
