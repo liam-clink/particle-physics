@@ -80,6 +80,11 @@ int main()
 
     glfwSwapInterval(1); // Enable vsync
 
+    // Cull faces with CCW winding order
+    glEnable(GL_CULL_FACE); // cull face
+    glCullFace(GL_BACK);    // cull back face
+    glFrontFace(GL_CW);     // GL_CCW for counter clock-wise
+
     // Draw loop
     while (!glfwWindowShouldClose(window))
     {
