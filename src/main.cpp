@@ -1,5 +1,6 @@
 #include <gl_utils.hpp>
 #include <iostream>
+#include <shapes.hpp>
 
 using std::cout;
 
@@ -18,7 +19,7 @@ int main()
     GLFWwindow* window = glfwCreateWindow(1920, 1080, "Hello Triangle", NULL, NULL);
     if (!window)
     {
-        throw std::runtime_error("ERROR: could not oopen window with GLFW3\n");
+        throw std::runtime_error("ERROR: could not open window with GLFW3\n");
         glfwTerminate();
         return 1;
     }
@@ -29,44 +30,17 @@ int main()
     glewInit();
 
     // get version info
-    const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
-    const GLubyte* version = glGetString(GL_VERSION);   // version as a string
-    cout << "Renderer: " << renderer << "\n";
-    cout << "OpenGL version supported " << version << "\n";
+    print_gl_info();
 
     // tell GL to only draw onto a pixel if the shape is closer to the viewer
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
     // Actually drawing stuff now
-    float points[] = {0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, -0.5f, 0.0f};
-    float colours[] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+    std::array points = {0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, -0.5f, 0.0f};
+    std::array colors = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 
-    // Copy this data into a vertex buffer object on the GPU
-    GLuint positions_vbo = 0;
-    glGenBuffers(1, &positions_vbo); // generate ID for VBO
-    glBindBuffer(GL_ARRAY_BUFFER,
-                 positions_vbo); // binds buffer to GL_ARRAY_BUFFER target
-    // Allocate memory for the buffer bound to the GL_ARRAY_BUFFER target
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STREAM_DRAW);
-
-    GLuint colours_vbo = 0;
-    glGenBuffers(1, &colours_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), colours, GL_STATIC_DRAW);
-
-    // Put the vertex buffer object into a vertex array object
-    GLuint vao = 0;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, positions_vbo);
-    // GLuint layout index, GLint size, GLenum type, GLboolean normalize, GLsizei stride, const void * pointer);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    // The vertex attribute arrays are disabled by default
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
+    auto vao = triangle(points, colors);
 
     // Compile the shaders
     GLuint vs = load_shader("../share/Particle Physics/test_vertex_shader.glsl", GL_VERTEX_SHADER);
@@ -101,11 +75,11 @@ int main()
         glfwSwapBuffers(window);
 
         // Update Triangle
-        glBindBuffer(GL_ARRAY_BUFFER, positions_vbo);
-        points[6] += 0.01;
-        if (points[6] >= 1.)
-            points[6] -= 2.;
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
+        // glBindBuffer(GL_ARRAY_BUFFER, positions_vbo);
+        // points[6] += 0.01;
+        // if (points[6] >= 1.)
+        //     points[6] -= 2.;
+        // glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
     }
 
     // close GL context

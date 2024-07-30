@@ -1,4 +1,4 @@
-src_files = ['main.cpp', 'gl_utils.cpp', 'text_utils.cpp']
+src_files = ['main.cpp', 'gl_utils.cpp', 'text_utils.cpp', 'shapes.cpp']
 
 executable('hello_triangle',
 'main.cpp',

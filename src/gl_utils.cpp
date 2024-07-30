@@ -1,5 +1,13 @@
 #include <gl_utils.hpp>
 
+void print_gl_info()
+{
+    const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
+    const GLubyte* version = glGetString(GL_VERSION);   // version as a string
+    std::cout << "Renderer: " << renderer << "\n";
+    std::cout << "OpenGL version supported " << version << "\n";
+}
+
 GLuint load_shader(const std::filesystem::path& filepath, GLenum shader_type)
 {
     auto shader_source = load_text_file(filepath);
