@@ -96,11 +96,11 @@ int main()
         glfwSwapBuffers(window);
 
         // Update Triangle
-        // glBindBuffer(GL_ARRAY_BUFFER, positions_vbo);
-        // points[6] += 0.01;
-        // if (points[6] >= 1.)
-        //     points[6] -= 2.;
-        // glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
+        glBindBuffer(GL_ARRAY_BUFFER, positions_vbo);
+        points[6] += 0.01;
+        if (points[6] >= 1.)
+            points[6] -= 2.;
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
     }
 
     // close GL context
