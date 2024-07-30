@@ -1,6 +1,11 @@
 #version 400
-out vec4 frag_colour;
+// The main color buffer is location 0
+// This just draws directly to the frame buffer
+
+layout(location = 2) in vec3 color;
+out vec4 fragment_color;
+
 void main()
 {
-    frag_colour = vec4(0.5, 0.0, 0.5, 1.0);
+    fragment_color = vec4(color, 1.0);
 }

@@ -39,23 +39,34 @@ int main()
     glDepthFunc(GL_LESS);
 
     // Actually drawing stuff now
-    float points[] = {0.0, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0};
+    float points[] = {0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, -0.5f, 0.0f};
+    float colours[] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 
     // Copy this data into a vertex buffer object on the GPU
-    GLuint vbo = 0;
-    glGenBuffers(1, &vbo); // generate ID for VBO
+    GLuint positions_vbo = 0;
+    glGenBuffers(1, &positions_vbo); // generate ID for VBO
     glBindBuffer(GL_ARRAY_BUFFER,
-                 vbo); // binds buffer to GL_ARRAY_BUFFER target
+                 positions_vbo); // binds buffer to GL_ARRAY_BUFFER target
     // Allocate memory for the buffer bound to the GL_ARRAY_BUFFER target
     glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STREAM_DRAW);
+
+    GLuint colours_vbo = 0;
+    glGenBuffers(1, &colours_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
+    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), colours, GL_STATIC_DRAW);
 
     // Put the vertex buffer object into a vertex array object
     GLuint vao = 0;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, positions_vbo);
+    // GLuint layout index, GLint size, GLenum type, GLboolean normalize, GLsizei stride, const void * pointer);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    // The vertex attribute arrays are disabled by default
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
 
     // Compile the shaders
     GLuint vs = load_shader("../share/Particle Physics/test_vertex_shader.glsl", GL_VERTEX_SHADER);
@@ -85,11 +96,11 @@ int main()
         glfwSwapBuffers(window);
 
         // Update Triangle
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        points[6] += 0.01;
-        if (points[6] >= 1.)
-            points[6] -= 2.;
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
+        // glBindBuffer(GL_ARRAY_BUFFER, positions_vbo);
+        // points[6] += 0.01;
+        // if (points[6] >= 1.)
+        //     points[6] -= 2.;
+        // glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
     }
 
     // close GL context
