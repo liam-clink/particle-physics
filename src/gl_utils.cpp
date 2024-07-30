@@ -12,8 +12,8 @@ GLuint load_shader(const std::filesystem::path& filepath, GLenum shader_type)
 
     // This is two lines because
     const char* source = shader_source->c_str();
-    std::cout << "Shader source: \n";
-    std::cout << source;
+    std::cout << "Loaded shader source: \n";
+    std::cout << source << std::endl;
     glShaderSource(shader_id, 1, &source, NULL);
 
     glCompileShader(shader_id);
