@@ -1,4 +1,4 @@
-project('Particle Physics', 'cpp')
+project('particle_physics', 'cpp')
 
 cpp = meson.get_compiler('cpp')
 

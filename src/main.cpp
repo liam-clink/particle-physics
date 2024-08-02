@@ -43,8 +43,8 @@ int main()
     auto vao = triangle(points, colors);
 
     // Compile the shaders
-    GLuint vs = load_shader("../share/Particle Physics/test_vertex_shader.glsl", GL_VERTEX_SHADER);
-    GLuint fs = load_shader("../share/Particle Physics/test_fragment_shader.glsl", GL_FRAGMENT_SHADER);
+    GLuint vs = load_shader("../share/particle_physics/test_vertex_shader.glsl", GL_VERTEX_SHADER);
+    GLuint fs = load_shader("../share/particle_physics/test_fragment_shader.glsl", GL_FRAGMENT_SHADER);
 
     // Link the shaders together
     GLuint shader_program = glCreateProgram();
