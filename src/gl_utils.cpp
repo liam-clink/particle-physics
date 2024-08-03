@@ -11,7 +11,7 @@ void print_gl_info()
 GLuint load_shader(const std::filesystem::path& filepath, GLenum shader_type)
 {
     auto shader_source = load_text_file(filepath);
-    if (!shader_source)
+    if (shader_source == std::nullopt)
         throw std::runtime_error("Failed to read GLSL source file.");
 
     GLuint shader_id = glCreateShader(shader_type);
