@@ -1,6 +1,6 @@
 #include <shapes.hpp>
 
-GLuint triangle(const std::array<float, 9>& points, const std::array<float, 9>& colors)
+triangle::triangle(const std::array<float, 9>& points, const std::array<float, 9>& colors)
 {
 
     // Copy this data into a vertex buffer object on the GPU
@@ -17,13 +17,12 @@ GLuint triangle(const std::array<float, 9>& points, const std::array<float, 9>& 
     glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), colors.data(), GL_STATIC_DRAW);
 
     // Put the vertex buffer object into a vertex array object
-    GLuint vao = 0;
-    glGenVertexArrays(1, &vao);
+    glGenVertexArrays(1, &this->vao);
     glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, positions_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->position_vbo);
     // GLuint layout index, GLint size, GLenum type, GLboolean normalize, GLsizei stride, const void * pointer);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->color_vbo);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     // The vertex attribute arrays are disabled by default
     glEnableVertexAttribArray(0);
@@ -32,6 +31,26 @@ GLuint triangle(const std::array<float, 9>& points, const std::array<float, 9>& 
     // Unbind VAO and VBOs
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
 
-    return vao;
+triangle::~triangle()
+{
+    if (this->vao)
+        glDeleteVertexArrays(1, &this->vao);
+    if (this->position_vbo)
+        glDeleteBuffers(1, &this->position_vbo);
+    if (this->color_vbo)
+        glDeleteBuffers(1, &this->color_vbo);
+}
+
+void triangle::update_points(const std::array<float, 9>& points)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, this->position_vbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points.data());
+}
+
+void triangle::update_colors(const std::array<float, 9>& colors)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, this->color_vbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(colors), colors.data());
 }

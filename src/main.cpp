@@ -40,7 +40,7 @@ int main()
     std::array points = {0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, -0.5f, 0.0f};
     std::array colors = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 
-    auto vao = triangle(points, colors);
+    triangle triangle(points, colors);
 
     // Compile the shaders
     GLuint vs = load_shader("../share/particle_physics/test_vertex_shader.glsl", GL_VERTEX_SHADER);
@@ -65,7 +65,7 @@ int main()
         // wipe the drawing surface clear
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(shader_program);
-        glBindVertexArray(vao);
+        glBindVertexArray(triangle.vao);
         // draw points 0-3 from the currently bound VAO with current in-use
         // shader
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -75,11 +75,10 @@ int main()
         glfwSwapBuffers(window);
 
         // Update Triangle
-        // glBindBuffer(GL_ARRAY_BUFFER, positions_vbo);
-        // points[6] += 0.01;
-        // if (points[6] >= 1.)
-        //     points[6] -= 2.;
-        // glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
+        points[6] += 0.01;
+        if (points[6] >= 1.)
+            points[6] -= 2.;
+        // triangle.update_points(points);
     }
 
     // close GL context
